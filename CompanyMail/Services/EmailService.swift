@@ -1,5 +1,4 @@
 import Foundation
-import MailCore2
 
 /// Service coordinateur qui gère IMAP + SMTP pour un compte
 @MainActor
@@ -54,10 +53,8 @@ final class EmailService: ObservableObject {
         isSyncing = true
         defer { isSyncing = false }
 
-        let start = UInt64(max(1, page * pageSize + 1))
-        let range = MCORange(location: start, length: UInt64(pageSize))
-
-        let fetchedEmails = try await imap.fetchEmails(folder: folder.path, range: range)
+        let start = max(1, page * pageSize + 1)
+        let fetchedEmails = try await imap.fetchEmails(folder: folder.path, range: (start: start, count: pageSize))
         emails[folder.path] = fetchedEmails
         return fetchedEmails
     }
@@ -163,18 +160,14 @@ final class EmailService: ObservableObject {
     func searchEmails(query: String, folder: MailFolder) async throws -> [Email] {
         guard let imap = imapService else { throw MailError.connectionFailed("Non connecté") }
         let uids = try await imap.search(query: query, folder: folder.path)
-        // Fetch the found emails
         guard !uids.isEmpty else { return [] }
-        let indexSet = MCOIndexSet()
-        for uid in uids { indexSet.add(UInt64(uid)) }
-        let range = MCORange(location: UInt64(uids.min() ?? 1), length: UInt64(uids.count))
-        return try await imap.fetchEmails(folder: folder.path, range: range)
+        // Re-fetch les emails trouvés
+        return try await imap.fetchEmails(folder: folder.path, range: (start: 1, count: uids.count))
     }
 
     // MARK: - Snooze
 
     func snoozeEmail(_ email: Email, until date: Date) async throws {
-        // Snooze : on marque localement et on programme une notification
         updateEmailInCache(email) {
             $0.isSnoozed = true
             $0.snoozeDate = date
