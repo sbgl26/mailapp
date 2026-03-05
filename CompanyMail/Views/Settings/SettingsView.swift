@@ -37,7 +37,7 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "person.circle.fill")
-                                    .foregroundStyle(.accent)
+                                    .foregroundStyle(Color.accentColor)
                                 VStack(alignment: .leading) {
                                     Text(account.displayName)
                                     Text(account.email)

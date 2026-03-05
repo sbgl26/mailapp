@@ -341,7 +341,7 @@ struct AttachmentCardView: View {
             VStack(spacing: 8) {
                 Image(systemName: attachment.icon)
                     .font(.title2)
-                    .foregroundStyle(.accent)
+                    .foregroundStyle(Color.accentColor)
 
                 VStack(spacing: 2) {
                     Text(attachment.filename)
@@ -417,7 +417,7 @@ struct MoveToFolderView: View {
                                 Spacer()
                                 if folder.path == email.folderPath {
                                     Image(systemName: "checkmark")
-                                        .foregroundStyle(.accent)
+                                        .foregroundStyle(Color.accentColor)
                                 }
                             }
                         }

@@ -10,21 +10,27 @@ struct MainView: View {
     #endif
 
     var body: some View {
+        mainContent
+            .sheet(isPresented: $appState.isComposing) {
+                ComposeView()
+            }
+            .onChange(of: appState.selectedFolder) { _, folder in
+                guard let folder, let service = appState.currentEmailService() else { return }
+                Task {
+                    await mailboxVM.loadEmails(service: service, folder: folder)
+                }
+            }
+    }
+
+    @ViewBuilder
+    private var mainContent: some View {
         #if os(macOS)
         NavigationSplitView {
             SidebarView()
         } content: {
             MailboxView(viewModel: mailboxVM, searchVM: searchVM)
         } detail: {
-            if let email = appState.selectedEmail {
-                EmailDetailView(email: email)
-            } else {
-                ContentUnavailableView(
-                    "Sélectionnez un email",
-                    systemImage: "envelope",
-                    description: Text("Choisissez un message dans la liste")
-                )
-            }
+            detailContent
         }
         .navigationSplitViewStyle(.balanced)
         .toolbar {
@@ -36,28 +42,24 @@ struct MainView: View {
         } content: {
             MailboxView(viewModel: mailboxVM, searchVM: searchVM)
         } detail: {
-            if let email = appState.selectedEmail {
-                EmailDetailView(email: email)
-            } else {
-                ContentUnavailableView(
-                    "Sélectionnez un email",
-                    systemImage: "envelope",
-                    description: Text("Choisissez un message dans la liste")
-                )
-            }
+            detailContent
         }
         .toolbar {
             mainToolbar
         }
         #endif
-        .sheet(isPresented: $appState.isComposing) {
-            ComposeView()
-        }
-        .onChange(of: appState.selectedFolder) { _, folder in
-            guard let folder, let service = appState.currentEmailService() else { return }
-            Task {
-                await mailboxVM.loadEmails(service: service, folder: folder)
-            }
+    }
+
+    @ViewBuilder
+    private var detailContent: some View {
+        if let email = appState.selectedEmail {
+            EmailDetailView(email: email)
+        } else {
+            ContentUnavailableView(
+                "Sélectionnez un email",
+                systemImage: "envelope",
+                description: Text("Choisissez un message dans la liste")
+            )
         }
     }
 

@@ -275,7 +275,7 @@ struct FilterChip: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .background(isSelected ? Color.accentColor.opacity(0.15) : Color(.quaternarySystemFill))
-                .foregroundStyle(isSelected ? .accent : .secondary)
+                .foregroundStyle(isSelected ? Color.accentColor : .secondary)
                 .clipShape(Capsule())
         }
         .buttonStyle(.plain)

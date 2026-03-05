@@ -60,7 +60,7 @@ struct OnboardingView: View {
 
             Image(systemName: "envelope.circle.fill")
                 .font(.system(size: 80))
-                .foregroundStyle(.accent)
+                .foregroundStyle(Color.accentColor)
 
             Text("CompanyMail")
                 .font(.largeTitle)
@@ -89,7 +89,7 @@ struct OnboardingView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(.accent)
+                    .background(Color.accentColor)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
@@ -100,7 +100,7 @@ struct OnboardingView: View {
                     step = .credentials
                 } label: {
                     Text("Autre serveur IMAP")
-                        .foregroundStyle(.accent)
+                        .foregroundStyle(Color.accentColor)
                 }
                 .buttonStyle(.plain)
             }
@@ -199,7 +199,7 @@ struct OnboardingView: View {
                     Text("Se connecter")
                         .padding(.horizontal, 24)
                         .padding(.vertical, 10)
-                        .background(.accent)
+                        .background(Color.accentColor)
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
@@ -287,7 +287,7 @@ struct OnboardingView: View {
                 Text("Commencer")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(.accent)
+                    .background(Color.accentColor)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
