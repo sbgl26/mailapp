@@ -9,10 +9,8 @@ struct CompanyMailApp: App {
             RootView()
                 .environmentObject(appState)
         }
-        #if os(macOS)
-        .windowStyle(.titleBar)
-        .defaultSize(width: 1200, height: 800)
 
+        #if os(macOS)
         Settings {
             SettingsView()
                 .environmentObject(appState)
